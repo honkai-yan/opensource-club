@@ -1,0 +1,1 @@
+export const entryBgBaseURL = "https://resource-1317825917.cos.ap-chengdu.myqcloud.com/class-site-imgs";
