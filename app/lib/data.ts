@@ -1,17 +1,16 @@
-import mysql from "mysql2/promise";
+import { User } from "./definition";
 
-const dbAccess: mysql.ConnectionOptions = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: parseInt(process.env.DB_PORT as string),
+export const defaultUserdata: User = {
+  id: 0,
+  name: "",
+  nick_name: "",
+  password: "",
+  avatar_src: "",
+  sch_id: "",
+  description: "",
+  cur_point: 0,
+  total_point: 0,
+  join_date: "",
+  delete_date: null,
+  is_deleted: false,
 };
-
-// 创建连接池
-const pool = mysql.createPool(dbAccess);
-
-export async function query(sql: string, values?: any[]) {
-  const [result] = await pool.query(sql, values);
-  return result;
-}
