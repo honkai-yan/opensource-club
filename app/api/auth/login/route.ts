@@ -7,10 +7,10 @@ import {
   incompleteInfoException,
   invalidCaptchaException,
   serverInternalException,
-  userNameOrPasswordException as usernameOrPasswordException,
+  userNameOrPasswordException,
   userNotExistException,
 } from "@/app/lib/exceptions";
-import { setCookie, signAccessToken, signJwt, signRefreshToken } from "@/app/lib/utils";
+import { setCookie, signAccessToken, signRefreshToken } from "@/app/lib/utils";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         setCookie(res, "refresh_token", await signRefreshToken(user), 60 * 60 * 24 * 7);
         return res;
       } else {
-        return usernameOrPasswordException();
+        return userNameOrPasswordException();
       }
     } else {
       return userNotExistException();
