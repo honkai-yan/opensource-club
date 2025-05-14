@@ -4,7 +4,7 @@ export default function Captcha({ url, onClick, ...props }: { url: string; onCli
   return (
     <div className="flex h-9 gap-1">
       <Input placeholder="验证码" maxLength={4} {...props} className="border-black border-1 flex-1" />
-      <div className="h-full w-[80px] bg-gray-500 rounded-md overflow-hidden" onClick={onClick as any}>
+      <div className="h-full w-[80px] bg-gray-300 rounded-md overflow-hidden cursor-pointer" onClick={onClick as any}>
         {url && (
           <img
             id="captcha"

@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-
-function generateCaptchaText(length = 4) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-}
+import svgCaptcha from "@/app/lib/svg-captcha"; // 坑！
+import bcrypt from "bcryptjs";
+import { setCookie } from "@/app/lib/utils";
 
 export async function GET(req: NextRequest) {
-  const text = generateCaptchaText().toLowerCase();
+  const captcha = svgCaptcha.create({
+    size: 4,
+    ignoreChars: "o0i1",
+    noise: 3,
+    color: false,
+    width: 80,
+    height: 36,
+    fontSize: 36,
+  });
 
-  req.cookies.set("captcha", text);
-  // return new NextResponse(captcha, {
-  //   headers: {
-  //     "Content-Type": "image/svg+xml",
-  //   },
-  // });
-  return new NextResponse("");
+  const res = new NextResponse(captcha.data, {
+    headers: {
+      "Content-Type": "image/svg+xml",
+    },
+  });
+  const encryptedCaptcha = await bcrypt.hash(captcha.text.toLowerCase(), 10);
+  setCookie(res, "captcha", encryptedCaptcha, 60 * 5);
+  return res;
 }

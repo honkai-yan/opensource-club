@@ -15,3 +15,18 @@ export function userNotExistException(message?: string) {
 export function userNameOrPasswordException(message?: string) {
   return NextResponse.json({ message: message ?? "用户名或密码错误，都是进不去的哦" }, { status: 401 });
 }
+
+// 信息不完整
+export function incompleteInfoException(message?: string) {
+  return NextResponse.json({ message: message ?? "提供的信息不完整" }, { status: 400 });
+}
+
+// 客户端验证码非法
+export function invalidCaptchaException(message?: string) {
+  return NextResponse.json({ message: message ?? "验证码错了是进不去的哦" }, { status: 400 });
+}
+
+// 验证码过期
+export function captchaExpiredException(message?: string) {
+  return NextResponse.json({ message: message ?? "验证码已过期" }, { status: 400 });
+}

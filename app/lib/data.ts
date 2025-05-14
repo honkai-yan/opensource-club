@@ -1,4 +1,5 @@
 import { User } from "./definition";
+import { query } from "./connection";
 
 export const defaultUserdata: User = {
   id: 0,
@@ -14,3 +15,7 @@ export const defaultUserdata: User = {
   delete_date: null,
   is_deleted: false,
 };
+
+export async function getUserRoleIdById(id: number) {
+  return await query(`select pos_id from users_positions where user_id = ?`, [id]);
+}

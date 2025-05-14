@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { initOnce } from "./lib/utils";
+
+initOnce();
 
 export const metadata: Metadata = {
   title: "电子科技大学成都学院-开放原子开源社团",

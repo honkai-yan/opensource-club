@@ -3,16 +3,16 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { UseFormReturn } from "react-hook-form";
 import Captcha from "./captcha";
 import Image from "next/image";
-import { getCaptchaURL } from "@/app/api/api";
-import { useState } from "react";
 
-export default function CaptchaField({ form }: { form: UseFormReturn<Logindata> }) {
-  const [captchaURL, setCaptchaURL] = useState(getCaptchaURL);
-
-  function getCaptcha() {
-    setCaptchaURL(() => getCaptchaURL + "?t=" + Date.now());
-  }
-
+export default function CaptchaField({
+  form,
+  captchaURL,
+  getCaptcha,
+}: {
+  form: UseFormReturn<Logindata>;
+  captchaURL: string;
+  getCaptcha: Function;
+}) {
   return (
     <FormField
       control={form.control}
