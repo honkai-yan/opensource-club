@@ -30,3 +30,8 @@ export function invalidCaptchaException(message?: string) {
 export function captchaExpiredException(message?: string) {
   return NextResponse.json({ message: message ?? "验证码已过期" }, { status: 400 });
 }
+
+// 访问Token过期
+export function accessTokenExpiredException(message?: string) {
+  return NextResponse.json({ message: message ?? "访问令牌已过期" }, { status: 401 });
+}

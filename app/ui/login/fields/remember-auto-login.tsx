@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-export default function RememberAutoLogin() {
-  const [remember, setRemember] = useState(false);
+export default function RememberAutoLogin({ autoLogin }: { autoLogin: boolean }) {
+  const [remember, setRemember] = useState(autoLogin);
+
+  useEffect(() => {
+    setRemember(autoLogin);
+  }, [autoLogin]);
 
   return (
     <Label htmlFor="remember">
       <Checkbox
         checked={remember}
         onCheckedChange={(checked) => {
-          localStorage.setItem("remember", checked ? "true" : "false");
+          localStorage.setItem("remember", checked ? "true" : "");
           setRemember(checked as boolean);
         }}
         name="remember"

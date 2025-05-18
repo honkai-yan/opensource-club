@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import svgCaptcha from "@/app/lib/svg-captcha"; // 坑！
 import bcrypt from "bcryptjs";
-import { setCookie } from "@/app/lib/utils";
+import { setCookie } from "@/app/lib/utils/utils.server";
 
 export async function GET(req: NextRequest) {
   const captcha = svgCaptcha.create({

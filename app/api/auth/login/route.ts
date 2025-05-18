@@ -10,11 +10,15 @@ import {
   userNameOrPasswordException,
   userNotExistException,
 } from "@/app/lib/exceptions";
-import { setCookie, signAccessToken, signRefreshToken } from "@/app/lib/utils";
+import { setCookie, signAccessToken, signRefreshToken } from "@/app/lib/utils/utils.server";
+import { queryUsersByName } from "@/app/lib/query";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { logindata }: { logindata: Logindata } = body;
+  if (!logindata) {
+    return incompleteInfoException();
+  }
   const { username, password, captcha } = logindata;
 
   if (!username || !password || !captcha) {
@@ -34,10 +38,12 @@ export async function POST(req: NextRequest) {
     if (user) {
       const isMatch = await bcrypt.compare(password!, user.password!);
       if (isMatch) {
-        const res = NextResponse.json({ message: "登录成功" });
         // 登录成功，返回登录信息，并签发jwt
+        const [userData] = await queryUsersByName(user.name!);
+        const res = NextResponse.json({ message: "登录成功", data: userData });
         setCookie(res, "access_token", await signAccessToken(user), 60 * 60);
         setCookie(res, "refresh_token", await signRefreshToken(user), 60 * 60 * 24 * 7);
+        setCookie(res, "captcha", null, 0);
         return res;
       } else {
         return userNameOrPasswordException();

@@ -5,12 +5,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useEffect, useState } from "react";
 import LoginForm from "../ui/login/login-form";
 import { Toaster, toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
   const [randImg, setRandImg] = useState("");
+  const searchParams = useSearchParams();
+  const [autoLogin, setAutoLogin] = useState(false);
 
   useEffect(() => {
     setRandImg(getRandomImg());
+    const t = searchParams.get("t");
+    if (t) {
+      toast.info("访问令牌过期或无效，请重新登录", { duration: 3000 });
+    }
+    const remember = Boolean(localStorage.getItem("remember"));
+    setAutoLogin(remember);
+    if (remember) {
+      // todo... 尝试自动登录
+    }
   }, []);
 
   const bgImg = randImg && (
@@ -27,7 +39,7 @@ export default function Login() {
           <CardDescription>CDUESTC 开放原子开源社团</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm toast={toast} />
+          <LoginForm toast={toast} autoLogin={autoLogin} />
         </CardContent>
       </Card>
     </div>

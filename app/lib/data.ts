@@ -1,5 +1,4 @@
 import { User } from "./definition";
-import { query } from "./connection";
 
 export const defaultUserdata: User = {
   id: 0,
@@ -14,8 +13,10 @@ export const defaultUserdata: User = {
   join_date: "",
   delete_date: null,
   is_deleted: false,
+  role: "",
+  department: "",
+  group_name: "",
+  direction: "",
 };
 
-export async function getUserRoleIdById(id: number) {
-  return await query(`select pos_id from users_positions where user_id = ?`, [id]);
-}
+export const adminRoles = ["会长", "副会长", "秘书处"];

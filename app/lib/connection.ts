@@ -12,11 +12,7 @@ const dbAccess: ConnectionOptions = {
 // 创建连接池
 const pool = createPool(dbAccess);
 
-export async function query(sql: string, values?: any[]) {
+export async function query<T>(sql: string, values?: any[]) {
   const [result] = await pool.query(sql, values);
-  return result;
+  return result as T[];
 }
-
-process.on("exit", () => {
-  pool.end();
-});

@@ -1,6 +1,7 @@
+import React from "react";
 import { z } from "zod";
 
-export type User = {
+export interface User {
   id?: number;
   name?: string;
   password?: string | null;
@@ -15,13 +16,39 @@ export type User = {
   join_date?: string;
   delete_date?: string | null;
   is_deleted?: boolean;
-};
 
-export type Logindata = {
+  role?: string;
+
+  department?: string;
+  group_name?: string;
+  direction?: string;
+}
+
+export interface TableUserBaseInfo {
+  avatarSrc?: string;
+  name?: string;
+  nickName?: string;
+  description?: string;
+}
+
+export interface TableUserGroupInfo {
+  groupName?: string;
+  direction?: string;
+}
+
+export interface TableUser {
+  id?: number;
+  baseInfo: TableUserBaseInfo;
+  department?: string;
+  role?: string;
+  group: TableUserGroupInfo;
+}
+
+export interface Logindata {
   username: string;
   password: string;
   captcha: string;
-};
+}
 
 export const loginFormSchema = z.object({
   username: z
@@ -42,3 +69,9 @@ export const loginFormSchema = z.object({
     .max(4, "验证码长度为4位")
     .regex(/^[a-zA-Z0-9]+$/, { message: "验证码只能包含字母或数字" }),
 });
+
+export interface NavItem {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+}
