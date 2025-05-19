@@ -18,7 +18,7 @@ export function userNameOrPasswordException(message?: string) {
 
 // 信息不完整
 export function incompleteInfoException(message?: string) {
-  return NextResponse.json({ message: message ?? "提供的信息不完整" }, { status: 400 });
+  return NextResponse.json({ message: message ?? "登录信息不完整" }, { status: 400 });
 }
 
 // 客户端验证码非法
@@ -34,4 +34,9 @@ export function captchaExpiredException(message?: string) {
 // 访问Token过期
 export function accessTokenExpiredException(message?: string) {
   return NextResponse.json({ message: message ?? "访问令牌已过期" }, { status: 401 });
+}
+
+// 刷新Token过期
+export function refreshTokenExpiredException(message?: string) {
+  return NextResponse.json({ message: message ?? "登录令牌已过期" }, { status: 401 });
 }

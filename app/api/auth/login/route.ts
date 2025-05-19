@@ -6,16 +6,20 @@ import {
   captchaExpiredException,
   incompleteInfoException,
   invalidCaptchaException,
+  refreshTokenExpiredException,
   serverInternalException,
   userNameOrPasswordException,
   userNotExistException,
 } from "@/app/lib/exceptions";
 import { setCookie, signAccessToken, signRefreshToken } from "@/app/lib/utils/utils.server";
 import { queryUsersByName } from "@/app/lib/query";
+import { verifyJwt } from "@/app/lib/utils/jwt";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { logindata }: { logindata: Logindata } = body;
+  const { logindata, autoLogin }: { logindata: Logindata; autoLogin: boolean } = body;
+  if (autoLogin) return await handleAutoLogin(req);
+
   if (!logindata) {
     return incompleteInfoException();
   }
@@ -54,4 +58,15 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     return serverInternalException(`处理请求失败：${err}`);
   }
+}
+
+async function handleAutoLogin(req: NextRequest) {
+  const refreshToken = req.cookies.get("refresh_token")?.value;
+  if (!refreshToken) {
+    return refreshTokenExpiredException();
+  }
+  if (!(await verifyJwt(refreshToken))) {
+    return refreshTokenExpiredException();
+  }
+  return NextResponse.json({ message: "登录成功" });
 }
