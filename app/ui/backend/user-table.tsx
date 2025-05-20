@@ -10,17 +10,36 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/app/lib/store";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { adminRoles } from "@/app/lib/data";
+import { useMediaQuery } from "@/app/lib/hooks";
 
 export default function UserTable({ data }: { data: TableUser[] }) {
   const { user } = useUserStore();
+  const [isDesktop, setIsDesktop] = useState(false);
   const columns: ColumnDef<TableUser>[] = useMemo(() => {
     return [
       {
@@ -107,9 +126,39 @@ export default function UserTable({ data }: { data: TableUser[] }) {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  useEffect(() => {
+    console.info(user);
+    setIsDesktop(useMediaQuery("(min-width: 768px)"));
+  }, []);
+
+  const handleAddNewUser = () => {};
+  const addNewUser = isDesktop ? (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>新增成员</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>新增成员</DialogTitle>
+          <DialogDescription>新增一个成员</DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  ) : (
+    <></>
+  );
+
   return (
     <>
-      <SearchMember />
+      <div className="flex mt-6 items-center gap-1 gap-y-2 flex-wrap">
+        <SearchMember className="w-full max-w-[500px]" />
+        {adminRoles.includes(user.role!) && (
+          <>
+            <Button>批量操作</Button>
+            {addNewUser}
+          </>
+        )}
+      </div>
       <Table className="mt-4">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

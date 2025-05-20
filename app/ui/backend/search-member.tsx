@@ -5,7 +5,7 @@ import { throttle } from "@/app/lib/utils/utils.common";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function SearchMember() {
+export default function SearchMember({ className }: { className: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get("query") || "");
@@ -23,9 +23,5 @@ export default function SearchMember() {
 
   const _fn = throttle(handleChange, 400);
 
-  return (
-    <div className="flex items-center gap-1 mt-6 max-w-md">
-      <Input placeholder="搜索社团成员" onChange={(e) => _fn(e.target.value)} />
-    </div>
-  );
+  return <Input className={className} placeholder="搜索社团成员" onChange={(e) => _fn(e.target.value)} />;
 }
