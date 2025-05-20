@@ -71,5 +71,10 @@ async function handleAutoLogin(req: NextRequest) {
     return refreshTokenExpiredException();
   }
   const userData = await queryUserById(user.id!);
-  return NextResponse.json({ message: "登录成功", data: userData });
+
+  const res = NextResponse.json({ message: "登录成功", data: userData });
+  setCookie(res, "access_token", await signAccessToken(user), 60 * 60);
+  setCookie(res, "refresh_token", await signRefreshToken(user), 60 * 60 * 24 * 7);
+  setCookie(res, "captcha", null, 0);
+  return res;
 }
