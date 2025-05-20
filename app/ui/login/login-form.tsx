@@ -15,7 +15,6 @@ import CaptchaField from "./fields/captcha-field";
 import RememberAutoLogin from "./fields/remember-auto-login";
 import { loginFormSchema } from "@/app/lib/definition";
 import { toast } from "sonner";
-import { useUserStore } from "@/app/lib/store";
 
 type toastType = typeof toast;
 
@@ -23,7 +22,6 @@ export default function LoginForm({ toast, autoLogin }: { toast: toastType; auto
   const [isLogining, setIsLogining] = useState(false);
   const router = useRouter();
   const [captchaURL, setCaptchaURL] = useState(getCaptchaURL);
-  const { setUser } = useUserStore();
 
   function getCaptcha() {
     setCaptchaURL(() => `${getCaptchaURL}?t=${Date.now()}`);
@@ -55,7 +53,6 @@ export default function LoginForm({ toast, autoLogin }: { toast: toastType; auto
     const data = await res.json();
     if (res.ok) {
       toast.success("登录成功", { duration: 3000 });
-      setUser(data.data);
       localStorage.setItem("user_base_info", JSON.stringify(data.data));
       setTimeout(() => {
         setIsLogining(false);
