@@ -24,7 +24,8 @@ const queryUserSQL = `
   `;
 
 export async function queryUserRoleIdById(id: number) {
-  return await query(`select pos_id from users_positions where user_id = ?`, [id]);
+  const [result] = await query(`select pos_id from users_positions where user_id = ?`, [id]);
+  return result as number;
 }
 
 export async function queryUsersByName(name: string) {

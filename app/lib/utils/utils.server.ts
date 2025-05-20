@@ -1,4 +1,4 @@
-import { User } from "../definition";
+import { AccessTokenPayload, User } from "../definition";
 import { NextRequest, NextResponse } from "next/server";
 import { signJwt, verifyJwt } from "./jwt";
 import { queryUserRoleIdById } from "../query";
@@ -14,13 +14,14 @@ export function setCookie(res: NextResponse, name: string, content: any, age: nu
 
 export async function signAccessToken(user: User) {
   try {
-    return await signJwt(
-      {
-        userId: user.id,
-        namename: user.name,
+    const payload: AccessTokenPayload = {
+        userId: user.id!,
+        username: user.name!,
         roleId: await queryUserRoleIdById(user.id!),
         type: "access",
-      },
+      }
+    return await signJwt(
+      payload as any,
       "1h"
     );
   } catch (err) {

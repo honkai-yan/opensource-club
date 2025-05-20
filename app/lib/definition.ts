@@ -75,3 +75,10 @@ export interface NavItem {
   href: string;
   icon: React.ReactNode;
 }
+
+export interface AccessTokenPayload {
+  userId: number;
+  username: string;
+  roleId: number;
+  type: "access";
+}
