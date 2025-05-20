@@ -21,12 +21,13 @@ export default function Login() {
     const t = searchParams.get("t");
     if (t) {
       toast.info("访问令牌过期或无效，请重新登录", { duration: 3000 });
-    }
-    const remember = Boolean(localStorage.getItem("remember"));
-    console.info(localStorage.getItem("remember"));
-    setAutoLogin(remember);
-    if (remember) {
-      requestAutoLogin();
+    } else {
+      const remember = Boolean(localStorage.getItem("remember"));
+      console.info(localStorage.getItem("remember"));
+      setAutoLogin(remember);
+      if (remember) {
+        requestAutoLogin();
+      }
     }
   }, []);
 
