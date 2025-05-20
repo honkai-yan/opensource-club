@@ -18,7 +18,7 @@ import { toast } from "sonner";
 
 type toastType = typeof toast;
 
-export default function LoginForm({ toast, autoLogin }: { toast: toastType; autoLogin: boolean }) {
+export default function LoginForm({ toast, remember }: { toast: toastType; remember: boolean }) {
   const [isLogining, setIsLogining] = useState(false);
   const router = useRouter();
   const [captchaURL, setCaptchaURL] = useState(getCaptchaURL);
@@ -71,7 +71,7 @@ export default function LoginForm({ toast, autoLogin }: { toast: toastType; auto
           <Username form={form} />
           <Password form={form} />
           <CaptchaField form={form} captchaURL={captchaURL} getCaptcha={getCaptcha} />
-          <RememberAutoLogin autoLogin={autoLogin} />
+          <RememberAutoLogin autoLogin={remember} />
           <Button type="submit" className="w-full mt-2" disabled={isLogining}>
             {isLogining && <Loader2 className="animate-spin" />}
             登录

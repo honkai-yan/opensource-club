@@ -12,7 +12,7 @@ import { loginURL } from "../api/api";
 export default function Login() {
   const [randImg, setRandImg] = useState("");
   const searchParams = useSearchParams();
-  const [autoLogin, setAutoLogin] = useState(false);
+  const [remember, setRemember] = useState(false);
   const router = useRouter();
   const isAutoLogining = useRef(false);
 
@@ -22,9 +22,9 @@ export default function Login() {
     if (t) {
       toast.info(`${t}，请重新登录`, { duration: 3000 });
     } else {
-      const remember = Boolean(localStorage.getItem("remember"));
-      setAutoLogin(remember);
-      if (remember) {
+      const _remember = Boolean(localStorage.getItem("remember"));
+      setRemember(_remember);
+      if (_remember) {
         requestAutoLogin();
       }
     }
@@ -66,7 +66,7 @@ export default function Login() {
           <CardDescription>CDUESTC 开放原子开源社团</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm toast={toast} autoLogin={autoLogin} />
+          <LoginForm toast={toast} remember={remember} />
         </CardContent>
       </Card>
     </div>
