@@ -20,7 +20,7 @@ export default function Login() {
     setRandImg(getRandomImg());
     const t = searchParams.get("t");
     if (t) {
-      toast.info("访问令牌过期或无效，请重新登录", { duration: 3000 });
+      toast.info(`${t}，请重新登录`, { duration: 3000 });
     } else {
       const remember = Boolean(localStorage.getItem("remember"));
       setAutoLogin(remember);
