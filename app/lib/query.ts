@@ -1,13 +1,7 @@
 import { query } from "./connection";
 import { User } from "./definition";
 
-export async function queryUserRoleIdById(id: number) {
-  return await query(`select pos_id from users_positions where user_id = ?`, [id]);
-}
-
-export async function queryUsersByName(name: string) {
-  let users: User[];
-  const sql = `
+const queryUserSQL = `
     select
         u.id,
         u.name,
@@ -28,11 +22,22 @@ export async function queryUsersByName(name: string) {
     left join users_departments ud on u.id = ud.user_id
     left join departments d on ud.dep_id = d.id
   `;
+
+export async function queryUserRoleIdById(id: number) {
+  return await query(`select pos_id from users_positions where user_id = ?`, [id]);
+}
+
+export async function queryUsersByName(name: string) {
+  let users: User[];
   if (name === "") {
-    users = await query(sql);
+    users = await query(queryUserSQL);
   } else {
-    users = await query(sql + ` where u.name like ? or u.nick_name like ?`, [`%${name}%`, `%${name}%`]);
+    users = await query(queryUserSQL + ` where u.name like ? or u.nick_name like ?`, [`%${name}%`, `%${name}%`]);
   }
-  Object.values(users).map((item) => (item.password = undefined));
   return users as User[];
 }
+
+export const queryUserById = async (id: number) => {
+  let [user] = (await query(queryUserSQL + ` where u.id = ?`, [id])) as User[];
+  return user as User;
+};

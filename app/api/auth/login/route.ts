@@ -12,7 +12,7 @@ import {
   userNotExistException,
 } from "@/app/lib/exceptions";
 import { setCookie, signAccessToken, signRefreshToken } from "@/app/lib/utils/utils.server";
-import { queryUsersByName } from "@/app/lib/query";
+import { queryUserById, queryUsersByName } from "@/app/lib/query";
 import { verifyJwt } from "@/app/lib/utils/jwt";
 
 export async function POST(req: NextRequest) {
@@ -65,8 +65,11 @@ async function handleAutoLogin(req: NextRequest) {
   if (!refreshToken) {
     return refreshTokenExpiredException();
   }
-  if (!(await verifyJwt(refreshToken))) {
+  const user = (await verifyJwt(refreshToken)) as User;
+  console.info(user);
+  if (!user) {
     return refreshTokenExpiredException();
   }
-  return NextResponse.json({ message: "登录成功" });
+  const userData = await queryUserById(user.id!);
+  return NextResponse.json({ message: "登录成功", data: userData });
 }

@@ -8,6 +8,7 @@ import { Toaster, toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { appRequest } from "../api/request";
 import { loginURL } from "../api/api";
+import { useUserStore } from "../lib/store";
 
 export default function Login() {
   const [randImg, setRandImg] = useState("");
@@ -15,6 +16,7 @@ export default function Login() {
   const [autoLogin, setAutoLogin] = useState(false);
   const router = useRouter();
   const isAutoLogining = useRef(false);
+  const { setUser } = useUserStore();
 
   useEffect(() => {
     setRandImg(getRandomImg());
@@ -43,6 +45,7 @@ export default function Login() {
     const data = await req.json();
     if (req.ok) {
       toast.success("登录成功");
+      setUser(data.data);
       setTimeout(() => {
         isAutoLogining.current = false;
         router.replace("/backend");
