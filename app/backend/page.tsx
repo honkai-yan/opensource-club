@@ -3,17 +3,23 @@ import PageHeader from "../ui/backend/page-header";
 import UserTable from "../ui/backend/user-table";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
-import { queryUsersByName } from "../lib/query";
+import { getCurrentUser, queryUsersByName } from "../lib/query";
 import { TableUser } from "../lib/definition";
+import { redirect } from "next/navigation";
 
 export default async function Members({ searchParams }: { searchParams: any }) {
   // 请求用户列表，将原始用户列表转换成Table需要的结构
   const users = await queryUsersByName((await searchParams).query || "");
-  
+  const curUser = await getCurrentUser();
+
+  if (!curUser) {
+    redirect("/login?m=用户数据异常");
+  }
+
   users.map((item) => {
     if (!item.description || item.description === "") {
       item.description = "这个人没有描述";
-    } 
+    }
   });
 
   const tableUsers: TableUser[] = users.map((user) => {
@@ -46,7 +52,7 @@ export default async function Members({ searchParams }: { searchParams: any }) {
           </div>
         }
       >
-        <UserTable data={tableUsers} />
+        <UserTable data={tableUsers} curUser={curUser} />
       </Suspense>
     </>
   );

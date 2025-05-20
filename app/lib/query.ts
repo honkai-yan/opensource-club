@@ -1,5 +1,7 @@
 import { query } from "./connection";
-import { User } from "./definition";
+import { AccessTokenPayload, User } from "./definition";
+import { cookies } from "next/headers";
+import { verifyJwt } from "./utils/jwt";
 
 const queryUserSQL = `
     select
@@ -41,4 +43,16 @@ export async function queryUsersByName(name: string) {
 export const queryUserById = async (id: number) => {
   let user: User[] = await query(queryUserSQL + ` where u.id = ?`, [id]);
   return user[0];
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access_token")!.value;
+    const userdata: AccessTokenPayload = (await verifyJwt(accessToken)) as any;
+    const user = await queryUserById(userdata.userId);
+    return user;
+  } catch (err) {
+    return null;
+  }
 };

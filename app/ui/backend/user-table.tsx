@@ -3,7 +3,7 @@
 import { PackageOpenIcon } from "lucide-react";
 import SearchMember from "./search-member";
 import { ColumnDef, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { TableUser, TableUserBaseInfo, TableUserGroupInfo } from "@/app/lib/definition";
+import { TableUser, TableUserBaseInfo, TableUserGroupInfo, User } from "@/app/lib/definition";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Image from "next/image";
 import {
@@ -32,13 +32,12 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useUserStore } from "@/app/lib/store";
 import { useEffect, useMemo, useState } from "react";
 import { adminRoles } from "@/app/lib/data";
 import { useMediaQuery } from "@/app/lib/hooks";
 
-export default function UserTable({ data }: { data: TableUser[] }) {
-  const { user } = useUserStore();
+export default function UserTable({ data, curUser }: { data: TableUser[]; curUser: User }) {
+  const user = curUser;
   const [isDesktop, setIsDesktop] = useState(false);
   const columns: ColumnDef<TableUser>[] = useMemo(() => {
     return [

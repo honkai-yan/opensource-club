@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 import { verifyJwt } from "./jwt";
+import { User } from "../definition";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export function throttle(fn: Function, delay: number): Function {
   let timer: NodeJS.Timeout | null = null;
@@ -26,13 +28,3 @@ export async function verifyAccessToken(req: NextRequest) {
   if (!(await verifyJwt(accessToken))) return false;
   return true;
 }
-
-export const getLocalStorage = <T>(key: string) => {
-  try {
-    const value = localStorage.getItem(key);
-    if (!value) return null;
-    return JSON.parse(value) as T;
-  } catch (_) {
-    return null;
-  }
-};
