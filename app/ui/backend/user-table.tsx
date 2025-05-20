@@ -130,7 +130,8 @@ export default function UserTable({ data, curUser }: { data: TableUser[]; curUse
   }, []);
 
   const handleAddNewUser = () => {};
-  const addNewUser = isDesktop ? (
+
+  const AddNewUser = isDesktop ? (
     <Dialog>
       <DialogTrigger asChild>
         <Button>新增成员</Button>
@@ -143,7 +144,24 @@ export default function UserTable({ data, curUser }: { data: TableUser[]; curUse
       </DialogContent>
     </Dialog>
   ) : (
-    <></>
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button>新增成员</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>新增成员</DrawerTitle>
+          <DrawerDescription>
+            新增一个成员
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter className="pt-2">
+          <DrawerClose asChild>
+            <Button variant="outline">取消</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 
   return (
@@ -153,7 +171,7 @@ export default function UserTable({ data, curUser }: { data: TableUser[]; curUse
         {adminRoles.includes(user.role!) && (
           <>
             <Button>批量操作</Button>
-            {addNewUser}
+            {AddNewUser}
           </>
         )}
       </div>
