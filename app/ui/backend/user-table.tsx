@@ -38,7 +38,7 @@ import { useMediaQuery } from "@/app/lib/hooks";
 
 export default function UserTable({ data, curUser }: { data: TableUser[]; curUser: User }) {
   const user = curUser;
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const columns: ColumnDef<TableUser>[] = useMemo(() => {
     return [
       {
@@ -125,10 +125,6 @@ export default function UserTable({ data, curUser }: { data: TableUser[]; curUse
     getCoreRowModel: getCoreRowModel(),
   });
 
-  useEffect(() => {
-    setIsDesktop(useMediaQuery("(min-width: 768px)"));
-  }, []);
-
   const handleAddNewUser = () => {};
 
   const AddNewUser = isDesktop ? (
@@ -151,9 +147,7 @@ export default function UserTable({ data, curUser }: { data: TableUser[]; curUse
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>新增成员</DrawerTitle>
-          <DrawerDescription>
-            新增一个成员
-          </DrawerDescription>
+          <DrawerDescription>新增一个成员</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
