@@ -7,13 +7,15 @@ import { queryUsersByName } from "../lib/query";
 import { TableUser } from "../lib/definition";
 
 export default async function Members({ searchParams }: { searchParams: any }) {
-  // 请求用户列表
+  // 请求用户列表，将原始用户列表转换成Table需要的结构
   const users = await queryUsersByName((await searchParams).query || "");
+  
   users.map((item) => {
     if (!item.description || item.description === "") {
       item.description = "这个人没有描述";
-    }
+    } 
   });
+
   const tableUsers: TableUser[] = users.map((user) => {
     return {
       id: user.id,
