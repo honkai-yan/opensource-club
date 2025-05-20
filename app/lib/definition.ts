@@ -82,3 +82,8 @@ export interface AccessTokenPayload {
   roleId: number;
   type: "access";
 }
+
+export interface RefreshTokenPayload {
+  userId: number;
+  type: "refresh";
+}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/app/lib/connection";
-import { Logindata, User } from "@/app/lib/definition";
+import { Logindata, RefreshTokenPayload, User } from "@/app/lib/definition";
 import bcrypt from "bcryptjs";
 import {
   captchaExpiredException,
@@ -62,19 +62,21 @@ export async function POST(req: NextRequest) {
 
 async function handleAutoLogin(req: NextRequest) {
   const refreshToken = req.cookies.get("refresh_token")?.value;
+
   if (!refreshToken) {
     return refreshTokenExpiredException();
   }
-  const user = (await verifyJwt(refreshToken)) as User;
-  console.info(user);
+
+  const user: RefreshTokenPayload = (await verifyJwt(refreshToken)) as any;
+
   if (!user) {
     return refreshTokenExpiredException();
   }
-  const userData = await queryUserById(user.id!);
 
+  const userData = await queryUserById(user.userId!);
   const res = NextResponse.json({ message: "登录成功", data: userData });
-  setCookie(res, "access_token", await signAccessToken(user), 60 * 60);
-  setCookie(res, "refresh_token", await signRefreshToken(user), 60 * 60 * 24 * 7);
+  setCookie(res, "access_token", await signAccessToken(userData), 60 * 60);
+  setCookie(res, "refresh_token", await signRefreshToken(userData), 60 * 60 * 24 * 7);
   setCookie(res, "captcha", null, 0);
   return res;
 }

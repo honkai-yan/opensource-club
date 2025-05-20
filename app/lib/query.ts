@@ -39,6 +39,6 @@ export async function queryUsersByName(name: string) {
 }
 
 export const queryUserById = async (id: number) => {
-  let [user] = (await query(queryUserSQL + ` where u.id = ?`, [id])) as User[];
-  return user as User;
+  let user: User[] = await query(queryUserSQL + ` where u.id = ?`, [id]);
+  return user[0];
 };

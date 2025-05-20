@@ -45,6 +45,7 @@ export default function Login() {
     if (req.ok) {
       toast.success("登录成功");
       setUser(data.data);
+      console.log(data.data);
       localStorage.setItem("user_base_info", JSON.stringify(data.data));
       setTimeout(() => {
         isAutoLogining.current = false;
