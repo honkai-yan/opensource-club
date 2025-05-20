@@ -42,7 +42,6 @@ export default function Login() {
     const data = await req.json();
     if (req.ok) {
       toast.success("登录成功");
-      localStorage.setItem("user_base_info", JSON.stringify(data.data));
       setTimeout(() => {
         isAutoLogining.current = false;
         router.replace("/backend");
