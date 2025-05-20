@@ -127,7 +127,6 @@ export default function UserTable({ data }: { data: TableUser[] }) {
   });
 
   useEffect(() => {
-    console.info(user);
     setIsDesktop(useMediaQuery("(min-width: 768px)"));
   }, []);
 
