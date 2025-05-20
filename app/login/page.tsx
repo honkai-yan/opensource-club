@@ -25,6 +25,7 @@ export default function Login() {
       toast.info("访问令牌过期或无效，请重新登录", { duration: 3000 });
     } else {
       const remember = Boolean(localStorage.getItem("remember"));
+      console.info(localStorage.getItem("remember"));
       setAutoLogin(remember);
       if (remember) {
         requestAutoLogin();
