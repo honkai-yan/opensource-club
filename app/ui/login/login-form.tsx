@@ -56,6 +56,7 @@ export default function LoginForm({ toast, autoLogin }: { toast: toastType; auto
     if (res.ok) {
       toast.success("登录成功", { duration: 3000 });
       setUser(data.data);
+      localStorage.setItem("user_base_info", JSON.stringify(data.data));
       setTimeout(() => {
         setIsLogining(false);
         router.replace("/backend");

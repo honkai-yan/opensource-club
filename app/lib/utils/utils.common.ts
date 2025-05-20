@@ -26,3 +26,13 @@ export async function verifyAccessToken(req: NextRequest) {
   if (!(await verifyJwt(accessToken))) return false;
   return true;
 }
+
+export const getLocalStorage = <T>(key: string) => {
+  try {
+    const value = localStorage.getItem(key);
+    if (!value) return null;
+    return JSON.parse(value) as T;
+  } catch (_) {
+    return null;
+  }
+};
